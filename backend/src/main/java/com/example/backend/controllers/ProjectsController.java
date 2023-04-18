@@ -40,18 +40,6 @@ public class ProjectsController {
         return new ResponseEntity<Projects>(project, HttpStatus.OK);
     }
 
-    /*@PostMapping("projects/add")
-    @ResponseBody
-    public ResponseEntity<Projects> adicionar_project(@RequestBody Projects project) {
-        Category categoria = null;
-        if (project.getCategoria() != null && project.getCategoria().getId() != null) {
-            categoria = categoryService.get_by_id(project.getCategoria().getId());
-        }
-        project.setCategoria(categoria);
-        Projects created_project = this.projectsService.save(project);
-        return new ResponseEntity<Projects>(created_project, HttpStatus.CREATED);
-    }*/
-
     @PostMapping("projects/add")
     @ResponseBody
     public ResponseEntity<?> adicionar_project(@RequestBody Projects project) {
@@ -84,7 +72,7 @@ public class ProjectsController {
             return new ResponseEntity<>("Ocorreu um erro ao adicionar o projeto: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    
     @DeleteMapping("projects/delete")
     public ResponseEntity<String> delete_project(@RequestParam Long id) {
         this.projectsService.delete(id);

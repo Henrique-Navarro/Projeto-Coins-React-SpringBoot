@@ -10,12 +10,6 @@ function ProjectForm({ handleSubmit, btnText, projectData }) {
   const [categorias, setCategorias] = useState([]);
   const [projeto, setProjeto] = useState(projectData || {});
 
-  const location = useLocation();
-  let message = "";
-  if (location.state && location.state.message) {
-    message = location.state.message;
-  }
-
   useEffect(() => {
     fetch("http://localhost:8080/category/all", {
       method: "GET",
@@ -70,7 +64,6 @@ function ProjectForm({ handleSubmit, btnText, projectData }) {
         value={projeto.categoria ? projeto.categoria.id : ""}
       />
       <SubmitButton text={btnText} />
-      {message && <Message msg={message} type="error" />}
     </form>
   );
 }

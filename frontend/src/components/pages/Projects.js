@@ -5,8 +5,12 @@ import styles from "./Projects.module.css";
 import LinkButton from "../layout/LinkButton";
 import Container from "../layout/Container";
 import ProjectCard from "../project/ProjectCard";
+import Loading from "../layout/Loading";
 
 function Projects() {
+  const [removeLoading, setRemoveLoading] = useState(false);
+  const [projectMessage, setProjectMessage] = useState("");
+
   const location = useLocation();
   let message = "";
   if (location.state && location.state.message) {
@@ -15,16 +19,36 @@ function Projects() {
 
   const [projetos, setProjetos] = useState([]);
   useEffect(() => {
-    fetch("http://localhost:8080/projects/all", {
-      method: "GET",
+    setTimeout(() => {
+      fetch("http://localhost:8080/projects/all", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((resp) => resp.json())
+        .then((data) => {
+          setProjetos(data);
+          setRemoveLoading(true);
+        })
+        .catch((err) => console.log(err));
+    }, 1000);
+  }, []);
+
+  function removeProject(id) {
+    console.log("Id removido:" + id);
+    fetch(`http://localhost:8080/projects/delete?id=${id}`, {
+      method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },
     })
-      .then((resp) => resp.json())
-      .then((data) => setProjetos(data))
+      .then(() => {
+        setProjetos(projetos.filter((projeto) => projeto.id !== id));
+        setProjectMessage("Projeto Removido com Sucesso!");
+      })
       .catch((err) => console.log(err));
-  }, []);
+  }
 
   return (
     <div className={styles.project_container}>
@@ -32,7 +56,10 @@ function Projects() {
         <h1>Projects</h1>
         <LinkButton to="/newproject" text="Criar Projeto" />
       </div>
+
       {message && <Message msg={message} type="sucess" />}
+      {projectMessage && <Message msg={projectMessage} type="delete" />}
+
       <Container customClass="start">
         {projetos.length > 0 &&
           projetos.map((projeto) => (
@@ -42,8 +69,13 @@ function Projects() {
               orcamento={projeto.orcamento}
               categoria={projeto.categoria.name}
               key={projeto.id}
+              handleRemove={removeProject}
             />
           ))}
+        {!removeLoading && <Loading />}
+        {removeLoading && projetos.length === 0 && (
+          <p>Não há projetos cadastrados :c</p>
+        )}
       </Container>
     </div>
   );
