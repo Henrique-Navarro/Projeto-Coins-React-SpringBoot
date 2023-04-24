@@ -74,7 +74,7 @@ function Projects() {
           ))}
         {!removeLoading && <Loading />}
         {removeLoading && projetos.length === 0 && (
-          <p>Não há projetos cadastrados :c</p>
+          <h3>Não há projetos cadastrados 😞</h3>
         )}
       </Container>
     </div>

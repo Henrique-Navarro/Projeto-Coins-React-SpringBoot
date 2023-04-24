@@ -8,8 +8,8 @@ import lombok.*;
 @Table(name = "projects")
 @Getter
 @Setter
-@Data                 
-@AllArgsConstructor     
+@Data
+@AllArgsConstructor
 @NoArgsConstructor
 public class Projects {
     @Id
@@ -22,12 +22,16 @@ public class Projects {
     @Column(name = "orcamento")
     private float orcamento;
 
+    @Column(name = "custo")
+    private float custo;
+
     @ManyToOne
     @JoinColumn(name = "categoria_id")
     private Category categoria;
 
-    public Projects(String name, float orcamento, Category categoria) {
+    public Projects(String name, float orcamento, float custo, Category categoria) {
         this.name = name;
+        this.custo = custo;
         this.orcamento = orcamento;
         this.categoria = categoria;
     }

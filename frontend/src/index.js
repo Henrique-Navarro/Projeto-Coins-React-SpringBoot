@@ -8,6 +8,7 @@ import Company from "./components/pages/Company";
 import Contact from "./components/pages/Contact";
 import NewProject from "./components/pages/NewProject";
 import Projects from "./components/pages/Projects";
+import Project from "./components/pages/Project";
 
 //CONFIGURAÇÃO DE ROTAS
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
       {
         path: "projects",
         element: <Projects />,
+      },
+      {
+        path: "projects/:id",
+        element: <Project />,
       },
     ],
   },

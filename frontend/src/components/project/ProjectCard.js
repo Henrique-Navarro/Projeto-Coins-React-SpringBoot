@@ -19,7 +19,7 @@ const ProjectCard = ({ id, name, orcamento, categoria, handleRemove }) => {
         {categoria}
       </p>
       <div className={styles.project_card_actions}>
-        <Link to="/">
+        <Link to={`/projects/${id}`}>
           <BsPencil />
           Editar
         </Link>
