@@ -23,7 +23,6 @@ function ProjectForm({ handleSubmit, btnText, projectData }) {
 
   const submit = (e) => {
     e.preventDefault();
-    //projeto.custo = 0;
     handleSubmit(projeto);
   };
 

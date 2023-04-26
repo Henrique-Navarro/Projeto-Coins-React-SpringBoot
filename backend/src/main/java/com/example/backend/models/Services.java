@@ -3,17 +3,16 @@ package com.example.backend.models;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
 import java.util.Set;
 
-@Entity(name = "projects")
-@Table(name = "projects")
+@Entity(name = "services")
+@Table(name = "services")
 @Getter
 @Setter
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Projects {
+public class Services {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
@@ -21,20 +20,19 @@ public class Projects {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "orcamento")
-    private float orcamento;
+    @Column(name = "descricao")
+    private String descricao;
 
     @Column(name = "custo")
     private float custo;
 
-    @ManyToOne
-    @JoinColumn(name = "categoria_id")
-    private Category categoria;
-    
-    public Projects(String name, float orcamento, float custo, Category categoria) {
+    @Column(name = "id_projeto")
+    private Long id_projeto;
+
+    public Services(String name, String descricao, float custo, Long id_projeto) {
         this.name = name;
+        this.descricao = descricao;
         this.custo = custo;
-        this.orcamento = orcamento;
-        this.categoria = categoria;
+        this.id_projeto = id_projeto;
     }
 }

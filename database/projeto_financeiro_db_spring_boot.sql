@@ -8,10 +8,16 @@ SHOW TABLES;
 INSERT INTO category (id,name) VALUES
 (1,'Viagem'),(2,'Investimento'),(3,'Lazer'),(4,'Planejamento'),(5,'Design'),(6, 'Desenvolvimento');
 SELECT * FROM category;
+DESCRIBE category;
 DELETE FROM category;
 
+#SERVIÇOS
+DESCRIBE services;
+SELECT * FROM services;
+
 #PROJETOS
-DESCRIBE projetos;
+DESCRIBE projects;
+SELECT * FROM projects;
 
 #DELETE
 DROP database projeto_financeiro_db;

@@ -1,6 +1,5 @@
 package com.example.backend.services;
 
-import com.example.backend.models.Category;
 import com.example.backend.models.Projects;
 import com.example.backend.repositories.ProjectsRepository;
 import org.springframework.beans.factory.annotation.Autowired;

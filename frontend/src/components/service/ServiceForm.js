@@ -1,18 +1,43 @@
 import styles from "../project/ProjectForm.module.css";
 import Input from "../form/Input";
 import SubmitButton from "../form/SubmitButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const ServiceForm = ({ handleSubmit, btnText, projectData }) => {
-  const [service, setService] = useState({});
+const ServiceForm = ({ btnText, serviceData }) => {
+  const [service, setService] = useState(serviceData || {});
+  const { id } = useParams();
+  const navigate = useNavigate();
 
-  function submit(e) {
+  const submit = (e) => {
     e.preventDefault();
-    projectData.services.push(service);
-    handleSubmit(projectData);
-  }
+    console.log("serviceForm: " + JSON.stringify(service));
+    createService(id, service);
+  };
   function handleChange(e) {
     setService({ ...service, [e.target.name]: e.target.value });
+    //console.log(service);
+  }
+
+  function createService(id, service) {
+    console.log("2createService: " + JSON.stringify(service));
+    console.log("id: " + id);
+    fetch(`http://localhost:8080/projects/${id}/services/add`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(service),
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        //setMessage("Serviço criado com Sucesso!");
+        //setType("sucess");
+        console.log(data);
+        setService(data);
+        navigate(`/projects/${id}`);
+      });
   }
 
   return (
@@ -23,6 +48,7 @@ const ServiceForm = ({ handleSubmit, btnText, projectData }) => {
         name="name"
         placeholder="Insira o nome do Serviço"
         handleOnChange={handleChange}
+        value={service.name ? service.name : ""}
       />
       <Input
         type="number"
@@ -30,6 +56,7 @@ const ServiceForm = ({ handleSubmit, btnText, projectData }) => {
         name="custo"
         placeholder="Insira o valor total"
         handleOnChange={handleChange}
+        value={service.custo ? service.custo : ""}
       />
       <Input
         type="text"
@@ -37,6 +64,7 @@ const ServiceForm = ({ handleSubmit, btnText, projectData }) => {
         name="descricao"
         placeholder="Descreva o Serviço"
         handleOnChange={handleChange}
+        value={service.descricao ? service.descricao : ""}
       />
       <SubmitButton text={btnText} />
     </form>

@@ -7,15 +7,19 @@ import ProjectForm from "../project/ProjectForm";
 import Message from "../layout/Message";
 import ServiceForm from "../service/ServiceForm";
 import { parse, v4 as uuidv4 } from "uuid";
+import { useNavigate } from "react-router-dom";
+import ServiceCard from "../service/ServiceCard";
 
 const Project = () => {
   const { id } = useParams();
   const [project, setProject] = useState([]);
+  const [services, setServices] = useState([]);
   const [showProjectForm, setShowProjectForm] = useState(false);
   const [showServiceForm, setShowServiceForm] = useState(false);
   const [message, setMessage] = useState();
   const [type, setType] = useState();
 
+  //CARREGAR PROJETO
   useEffect(() => {
     setTimeout(() => {
       fetch(`http://localhost:8080/projects/${id}`, {
@@ -30,7 +34,18 @@ const Project = () => {
         })
         .catch((err) => console.log(err));
     }, 1000);
-  }, [id]);
+  }, []);
+  //CARREGAR SERVICOS
+  useEffect(() => {
+    fetch(`http://localhost:8080/projects/${id}/services/all`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((resp) => resp.json())
+      .then((data) => setServices(data));
+  }, []);
 
   function toggleProjectForm() {
     setShowProjectForm(!showProjectForm);
@@ -38,23 +53,10 @@ const Project = () => {
   function toggleServiceForm() {
     setShowServiceForm(!showServiceForm);
   }
-  function createService(project) {
-    const lastService = project.services[project.services.length - 1];
-    lastService.id = uuidv4();
-    const lastServiceCusto = lastService.custo;
-    const newCusto = parseFloat(project.custo) + parseFloat(lastServiceCusto);
-
-    if (newCusto > parseFloat(project.orcamento)) {
-      setMessage("Orcamento ultrapassado, verifique o valor do Serviço");
-      setType("error");
-      project.services.pop();
-      return false;
-    }
-  }
+  function removeService() {}
 
   function editPost(project) {
     setMessage("");
-
     if (project.orcamento < project.custo) {
       setMessage("O orcamento não pode ser menor que o custo!");
       setType("error");
@@ -118,16 +120,29 @@ const Project = () => {
               <div className={styles.project_info}>
                 {showServiceForm && (
                   <ServiceForm
-                    handleSubmit={createService}
                     btnText="Adicionar Serviço"
-                    projectData={project}
+                    serviceData={services}
                   />
                 )}
               </div>
             </div>
             <h2>Serviços</h2>
             <Container customClass="start">
-              <p>Itens de Serviços</p>
+              {services.length > 0 &&
+                services.map((service) => {
+                  <ServiceCard
+                    id={service.id}
+                    name={service.name}
+                    custo={service.custo}
+                    descricao={service.descricao}
+                    key={service.id}
+                    handleRemove={removeService}
+                  />;
+                })}
+              {services.length > 0 && (
+                <p>Total de Serviços: {services.length}</p>
+              )}
+              {services.length === 0 && <p>Não há serviços cadastrados 😞</p>}
             </Container>
           </Container>
         </div>
